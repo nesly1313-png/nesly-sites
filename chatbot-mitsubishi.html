@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brossard Mitsubishi — Assistant Virtuel</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--red:#C8102E;--red2:#e01535;--dark:#0a0a0a;--s:#111;--s2:#1a1a1a;--txt:#f0f0f0;--mut:#888;--bor:#2a2a2a;--gold:#C8A020}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--txt);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(200,16,46,.12) 0%,transparent 65%);pointer-events:none;z-index:0}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,10,10,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bor);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{display:flex;align-items:center;gap:12px}
+.nav-diamond{display:flex;gap:4px}
+.diamond{width:14px;height:14px;background:var(--red);transform:rotate(45deg)}
+.nav-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;letter-spacing:.5px}
+.nav-name span{color:var(--red)}
+.lang-tog{display:flex;gap:3px;background:var(--s2);border-radius:20px;padding:3px;border:1px solid var(--bor)}
+.lang-btn{padding:4px 12px;border-radius:16px;font-size:.75rem;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--mut);transition:all .2s;font-family:'DM Sans',sans-serif}
+.lang-btn.on{background:var(--red);color:#fff}
+
+/* HERO */
+.hero{position:relative;z-index:1;text-align:center;padding:60px 24px 48px}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(200,16,46,.1);border:1px solid rgba(200,16,46,.3);border-radius:20px;padding:5px 14px;font-size:.72rem;font-weight:700;color:#ff4466;letter-spacing:1px;text-transform:uppercase;margin-bottom:20px}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:#ff4466;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.15;margin-bottom:12px;letter-spacing:-.5px}
+h1 span{color:var(--red)}
+.hero-sub{color:var(--mut);font-size:.95rem;max-width:480px;margin:0 auto 32px;line-height:1.6}
+
+/* SECTOR TABS */
+.sector-wrap{max-width:700px;margin:0 auto;padding:0 24px}
+.sector-tabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:24px}
+.stab{padding:9px 18px;border-radius:20px;border:1px solid var(--bor);background:var(--s2);color:var(--mut);font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s}
+.stab:hover{border-color:var(--red);color:var(--txt)}
+.stab.on{background:var(--red);color:#fff;border-color:var(--red)}
+
+/* CHAT */
+.chat-wrap{max-width:700px;margin:0 auto;padding:0 24px 80px}
+.chat-box{background:var(--s);border-radius:20px;border:1px solid var(--bor);overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.6)}
+.chat-head{padding:16px 20px;background:var(--s2);border-bottom:1px solid var(--bor);display:flex;align-items:center;gap:12px}
+.bot-av{width:40px;height:40px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.bot-nm{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem}
+.bot-st{font-size:.7rem;color:#2ecc71;display:flex;align-items:center;gap:4px}
+.bot-st::before{content:'';width:6px;height:6px;border-radius:50%;background:#2ecc71;display:inline-block}
+.msgs{height:340px;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.msgs::-webkit-scrollbar{width:4px}
+.msgs::-webkit-scrollbar-thumb{background:var(--bor);border-radius:4px}
+.msg{display:flex;gap:8px;align-items:flex-end;animation:mi .25s ease}
+@keyframes mi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.u{justify-content:flex-end}
+.mb{max-width:78%;padding:10px 14px;border-radius:16px;font-size:.88rem;line-height:1.5}
+.msg.b .mb{background:var(--s2);border:1px solid var(--bor);border-bottom-left-radius:4px}
+.msg.u .mb{background:var(--red);color:#fff;border-bottom-right-radius:4px}
+.mi{width:28px;height:28px;border-radius:50%;flex-shrink:0;background:var(--s2);border:1px solid var(--bor);display:flex;align-items:center;justify-content:center;font-size:.75rem}
+.td{display:flex;gap:4px;padding:12px 14px;background:var(--s2);border:1px solid var(--bor);border-radius:16px;border-bottom-left-radius:4px;align-items:center}
+.td span{width:6px;height:6px;background:var(--mut);border-radius:50%;animation:bo 1.2s infinite}
+.td span:nth-child(2){animation-delay:.2s}.td span:nth-child(3){animation-delay:.4s}
+@keyframes bo{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.qr{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 14px}
+.qb{padding:6px 12px;border-radius:20px;border:1px solid var(--bor);background:var(--s2);color:var(--mut);font-size:.78rem;font-weight:500;cursor:pointer;transition:all .2s}
+.qb:hover{border-color:var(--red);color:var(--red)}
+.inp-area{padding:14px;border-top:1px solid var(--bor);display:flex;gap:10px;align-items:center}
+.inp{flex:1;background:var(--s2);border:1px solid var(--bor);border-radius:20px;padding:10px 16px;color:var(--txt);font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+.inp::placeholder{color:var(--mut)}.inp:focus{border-color:var(--red)}
+.snd{width:40px;height:40px;border-radius:50%;background:var(--red);color:#fff;border:none;cursor:pointer;font-size:.95rem;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.snd:hover{background:var(--red2);transform:scale(1.05)}.snd:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* CONTACT */
+.contact-band{background:var(--s);border-top:1px solid var(--bor);padding:32px 24px;text-align:center;margin-top:0}
+.contact-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:16px;color:var(--txt)}
+.contact-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:600px;margin:0 auto}
+.c-btn{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;border:1px solid var(--bor);background:var(--s2);color:var(--txt);font-size:.82rem;font-weight:600;text-decoration:none;transition:all .2s}
+.c-btn:hover{border-color:var(--red);color:var(--red)}
+.footer-note{margin-top:20px;font-size:.72rem;color:var(--mut);font-family:'DM Sans',sans-serif}
+.footer-note span{color:var(--gold)}
+
+@media(max-width:600px){nav{padding:0 16px}.hero{padding:40px 16px 32px}.chat-wrap,.sector-wrap{padding:0 12px 60px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-diamond">
+      <div class="diamond"></div>
+      <div class="diamond" style="margin-left:-4px"></div>
+      <div class="diamond" style="margin-top:9px;margin-left:-22px"></div>
+    </div>
+    <div class="nav-name">Brossard <span>Mitsubishi</span></div>
+  </div>
+  <div class="lang-tog">
+    <button class="lang-btn on" onclick="setLang('fr')">FR</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge" id="h-badge">Assistant Virtuel 24h/24</div>
+  <h1 id="h-title">Votre assistant <span>Mitsubishi</span><br>disponible à tout moment</h1>
+  <p class="hero-sub" id="h-sub">Véhicules neufs & d'occasion, financement, service après-vente. Obtenez une réponse instantanée, même à minuit.</p>
+</div>
+
+<div class="sector-wrap">
+  <div class="sector-tabs">
+    <button class="stab on" data-s="neuf" onclick="setSector('neuf')">🚗 <span class="tab-lbl">Véhicules Neufs</span></button>
+    <button class="stab" data-s="occasion" onclick="setSector('occasion')">🔄 <span class="tab-lbl">Véhicules d'Occasion</span></button>
+    <button class="stab" data-s="finance" onclick="setSector('finance')">💰 <span class="tab-lbl">Financement</span></button>
+    <button class="stab" data-s="service" onclick="setSector('service')">🔧 <span class="tab-lbl">Service & Entretien</span></button>
+  </div>
+</div>
+
+<div class="chat-wrap">
+  <div class="chat-box">
+    <div class="chat-head">
+      <div class="bot-av">🚗</div>
+      <div>
+        <div class="bot-nm" id="bot-nm">Mits Bot</div>
+        <div class="bot-st" id="bot-st">En ligne</div>
+      </div>
+    </div>
+    <div class="msgs" id="msgs"></div>
+    <div class="qr" id="qr"></div>
+    <div class="inp-area">
+      <input class="inp" id="inp" type="text" onkeydown="if(event.key==='Enter')send()">
+      <button class="snd" id="snd" onclick="send()">➤</button>
+    </div>
+  </div>
+</div>
+
+<div class="contact-band">
+  <div class="contact-title" id="c-title">Parler à un conseiller humain</div>
+  <div class="contact-grid">
+    <a class="c-btn" href="tel:+14505001112">📞 (450) 500-1112</a>
+    <a class="c-btn" href="mailto:amoustatia@brossardmitsubishi.ca">✉️ Anas Moustatia</a>
+    <a class="c-btn" href="https://maps.google.com/?q=9405+Boulevard+Taschereau+Brossard+Quebec" target="_blank">📍 9405 Boul. Taschereau, Brossard</a>
+    <a class="c-btn" href="https://wa.me/14505001112" target="_blank">💬 WhatsApp</a>
+  </div>
+  <div class="footer-note">Assistant IA créé par <span>Nesly Joseph</span> · <a href="https://chatbot-montreal.netlify.app" style="color:var(--gold);text-decoration:none">ChatBot AI Montréal</a></div>
+</div>
+
+<script>
+const D = {
+  fr:{
+    badge:'Assistant Virtuel 24h/24',
+    title:'Votre assistant <span style="color:var(--red)">Mitsubishi</span><br>disponible à tout moment',
+    sub:'Véhicules neufs & d\'occasion, financement, service après-vente. Obtenez une réponse instantanée, même à minuit.',
+    online:'En ligne', ph:'Écrivez votre message...',
+    ctitle:'Parler à un conseiller humain',
+    s:{
+      neuf:{nm:'Mits Bot',
+        w:'Bonjour ! Je suis l\'assistant virtuel de **Brossard Mitsubishi** 🚗\n\nJe peux vous aider avec nos **véhicules neufs**. Que recherchez-vous ?',
+        q:['🚗 Modèles disponibles','💰 Obtenir un prix','📅 Essai routier','🎁 Promotions en cours'],
+        r:{
+          modèl:['Nous proposons : **Mitsubishi Outlander**, **Eclipse Cross**, **RVR**, **Mirage** et le **Outlander PHEV** (hybride rechargeable) ⚡. Quel modèle vous intéresse ?','Notre gamme 2024 offre des SUV modernes avec garantie 10 ans/160 000 km. Voulez-vous des détails sur un modèle en particulier ?'],
+          prix:['Pour obtenir le meilleur prix personnalisé, notre conseiller Anas Moustatia peut vous préparer une soumission complète. Puis-je prendre vos coordonnées ?','Nos prix débutent à partir de 18 998$ pour la Mirage et à partir de 29 998$ pour l\'Outlander. Voulez-vous une soumission personnalisée ?'],
+          essai:['Parfait ! Un essai routier se planifie facilement. 📅 Quel jour vous convient ? Nous sommes ouverts du lundi au samedi.','Excellent choix ! Pour réserver votre essai, appelez-nous au (450) 500-1112 ou laissez-moi vos coordonnées.'],
+          promo:['Nous avons présentement des promotions exceptionnelles avec **0% de financement** sur certains modèles et jusqu\'à **5 000$** de rabais de fidélité ! 🎁 Voulez-vous plus de détails ?'],
+          def:['Je serais ravi de vous aider avec les véhicules neufs Mitsubishi ! 😊 Souhaitez-vous voir nos modèles disponibles ou obtenir une soumission ?','Bonne question ! Notre équipe peut vous aider avec ça. Souhaitez-vous être contacté par un conseiller ?']
+        }
+      },
+      occasion:{nm:'Mits Bot',
+        w:'Bonjour ! Je suis l\'assistant de **Brossard Mitsubishi** 🔄\n\nNotre inventaire de véhicules d\'occasion certifiés vous attend ! Que recherchez-vous ?',
+        q:['🔍 Voir l\'inventaire','✅ Véhicules certifiés','💳 Financement dispo','📋 Carfax gratuit'],
+        r:{
+          inventair:['Notre inventaire change régulièrement ! Nous avons des véhicules de toutes marques, tous budgets. Quel est votre budget approximatif ? 💰','Nous avons actuellement plus de 50 véhicules d\'occasion disponibles. Voulez-vous qu\'un conseiller vous prépare une sélection personnalisée ?'],
+          certifi:['Nos véhicules certifiés Mitsubishi passent une inspection **150 points** et incluent une garantie prolongée. 100% fiables ! ✅','Programme Véhicules d\'Occasion Certifiés : inspection complète + garantie + Carfax inclus. Voulez-vous voir nos certifiés disponibles ?'],
+          financ:['Financement disponible pour tous les dossiers, même crédit difficile ! 💳 Taux à partir de 3,99%. On travaille pour vous trouver la meilleure solution.'],
+          carfax:['Carfax gratuit sur tous nos véhicules d\'occasion ! 📋 Aucun secret sur l\'historique du véhicule. Quel véhicule vous intéresse ?'],
+          def:['Je suis là pour vous aider à trouver le véhicule d\'occasion parfait ! 🔄 Quel type de véhicule recherchez-vous ?','N\'hésitez pas ! Nos conseillers sont disponibles pour vous guider dans votre choix.']
+        }
+      },
+      finance:{nm:'Finance Bot',
+        w:'Bonjour ! Je suis spécialisé dans le **financement automobile** chez Brossard Mitsubishi 💰\n\nComment puis-je vous aider ?',
+        q:['📊 Calculer mes paiements','✅ Crédit difficile OK','🔄 Refinancement','💡 Leasing vs achat'],
+        r:{
+          calcul:['Pour calculer vos paiements, j\'ai besoin de : le prix du véhicule, votre mise de fonds, et la durée souhaitée. 📊 Sinon, appelez Anas au (450) 500-1112 pour une simulation complète !'],
+          crédit:['Crédit difficile, pas de crédit, faillite récente — nous travaillons avec TOUS les dossiers ! ✅ Nos experts financiers trouvent une solution pour vous.','Chez Brossard Mitsubishi, nous disons OUI quand les autres disent non. Laissez-nous évaluer votre dossier gratuitement.'],
+          refinanc:['Vous pouvez refinancer votre véhicule actuel pour réduire vos paiements ou libérer des liquidités. 🔄 Voulez-vous qu\'un spécialiste analyse votre situation ?'],
+          leas:['**Leasing :** paiements bas, véhicule neuf tous les 3-4 ans ✓\n**Achat :** propriété complète, sans restrictions ✓\n\nLe choix dépend de votre utilisation. Un conseiller peut vous guider selon votre profil !'],
+          def:['Je suis là pour simplifier votre financement ! 💰 Avez-vous un véhicule en tête ou souhaitez-vous d\'abord connaître votre capacité d\'emprunt ?']
+        }
+      },
+      service:{nm:'Service Bot',
+        w:'Bonjour ! Je suis l\'assistant du **Service Brossard Mitsubishi** 🔧\n\nComment puis-je vous aider aujourd\'hui ?',
+        q:['📅 Prendre rendez-vous','🔍 Estimation réparation','🛢️ Changement d\'huile','🚨 Rappel de sécurité'],
+        r:{
+          rendez:['Parfait ! Notre service est ouvert du lundi au vendredi 7h30-17h30, samedi 8h-12h. 📅 Appelez le (450) 500-1112 poste 4105 ou laissez-moi vos coordonnées !'],
+          estimat:['Pour une estimation précise, apportez votre véhicule ou décrivez le problème. Nos techniciens certifiés Mitsubishi évalueront gratuitement. 🔍'],
+          huile:['Changement d\'huile rapide disponible ! 🛢️ Durée : 30-45 min. Prenez rendez-vous au (450) 500-1112 poste 4105.'],
+          rappel:['Pour vérifier si votre Mitsubishi est concernée par un rappel, donnez-moi votre numéro VIN ou visitez le site officiel Mitsubishi Canada. 🚨'],
+          def:['Notre équipe de service certifiée est là pour vous ! 🔧 Souhaitez-vous prendre un rendez-vous ou avez-vous une question spécifique ?']
+        }
+      }
+    }
+  },
+  en:{
+    badge:'Virtual Assistant 24/7',
+    title:'Your <span style="color:var(--red)">Mitsubishi</span> assistant<br>available anytime',
+    sub:'New & used vehicles, financing, after-sales service. Get an instant answer, even at midnight.',
+    online:'Online', ph:'Type your message...',
+    ctitle:'Talk to a human advisor',
+    s:{
+      neuf:{nm:'Mits Bot',
+        w:'Hello! I\'m the virtual assistant for **Brossard Mitsubishi** 🚗\n\nI can help you with our **new vehicles**. What are you looking for?',
+        q:['🚗 Available models','💰 Get a price','📅 Test drive','🎁 Current promotions'],
+        r:{
+          model:['We offer: **Mitsubishi Outlander**, **Eclipse Cross**, **RVR**, **Mirage** and the **Outlander PHEV** (plug-in hybrid) ⚡. Which model interests you?','Our 2024 lineup features modern SUVs with a 10-year/160,000 km warranty. Would you like details on a specific model?'],
+          price:['For the best personalized price, our advisor Anas Moustatia can prepare a complete quote. Can I get your contact info?','Our prices start from $18,998 for the Mirage and $29,998 for the Outlander. Would you like a personalized quote?'],
+          test:['Great! A test drive is easy to schedule. 📅 What day works for you? We\'re open Monday through Saturday.','Excellent choice! To book your test drive, call us at (450) 500-1112 or leave me your contact info.'],
+          promo:['We currently have exceptional promotions with **0% financing** on select models and up to **$5,000** loyalty discounts! 🎁 Would you like more details?'],
+          def:['I\'d be happy to help with new Mitsubishi vehicles! 😊 Would you like to see available models or get a quote?','Great question! Our team can help with that. Would you like to be contacted by an advisor?']
+        }
+      },
+      occasion:{nm:'Mits Bot',
+        w:'Hello! I\'m the assistant for **Brossard Mitsubishi** 🔄\n\nOur certified pre-owned inventory is waiting for you! What are you looking for?',
+        q:['🔍 View inventory','✅ Certified vehicles','💳 Financing available','📋 Free Carfax'],
+        r:{
+          inventor:['Our inventory changes regularly! We have vehicles of all makes and budgets. What\'s your approximate budget? 💰','We currently have over 50 pre-owned vehicles available. Would you like an advisor to prepare a personalized selection?'],
+          certif:['Our certified Mitsubishi vehicles undergo a **150-point inspection** and include an extended warranty. 100% reliable! ✅'],
+          financ:['Financing available for all situations, even difficult credit! 💳 Rates from 3.99%. We work to find you the best solution.'],
+          carfax:['Free Carfax on all our pre-owned vehicles! 📋 No secrets about the vehicle\'s history. Which vehicle interests you?'],
+          def:['I\'m here to help you find the perfect pre-owned vehicle! 🔄 What type of vehicle are you looking for?']
+        }
+      },
+      finance:{nm:'Finance Bot',
+        w:'Hello! I specialize in **automotive financing** at Brossard Mitsubishi 💰\n\nHow can I help you?',
+        q:['📊 Calculate payments','✅ Bad credit OK','🔄 Refinancing','💡 Lease vs buy'],
+        r:{
+          calcul:['To calculate your payments, I need: the vehicle price, your down payment, and desired term. 📊 Or call Anas at (450) 500-1112 for a full simulation!'],
+          credit:['Bad credit, no credit, recent bankruptcy — we work with ALL situations! ✅ Our financial experts find a solution for you.'],
+          refinanc:['You can refinance your current vehicle to reduce payments or free up cash. 🔄 Would you like a specialist to analyze your situation?'],
+          leas:['**Leasing:** lower payments, new vehicle every 3-4 years ✓\n**Buying:** full ownership, no restrictions ✓\n\nThe choice depends on your usage. An advisor can guide you!'],
+          def:['I\'m here to simplify your financing! 💰 Do you have a vehicle in mind or would you like to know your borrowing capacity first?']
+        }
+      },
+      service:{nm:'Service Bot',
+        w:'Hello! I\'m the assistant for **Brossard Mitsubishi Service** 🔧\n\nHow can I help you today?',
+        q:['📅 Book appointment','🔍 Repair estimate','🛢️ Oil change','🚨 Safety recall'],
+        r:{
+          appoint:['Our service is open Mon-Fri 7:30am-5:30pm, Sat 8am-12pm. 📅 Call (450) 500-1112 ext. 4105 or leave me your contact info!'],
+          estimat:['For an accurate estimate, bring your vehicle or describe the issue. Our certified Mitsubishi technicians will evaluate it for free. 🔍'],
+          oil:['Quick oil change available! 🛢️ Duration: 30-45 min. Book at (450) 500-1112 ext. 4105.'],
+          recall:['To check if your Mitsubishi is affected by a recall, give me your VIN number or visit the official Mitsubishi Canada website. 🚨'],
+          def:['Our certified service team is here for you! 🔧 Would you like to schedule an appointment or do you have a specific question?']
+        }
+      }
+    }
+  }
+};
+
+let lang='fr', sector='neuf', busy=false;
+const g=id=>document.getElementById(id);
+
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('on',b.textContent===l.toUpperCase()));
+  const c=D[l];
+  g('h-badge').textContent=c.badge;
+  g('h-title').innerHTML=c.title;
+  g('h-sub').textContent=c.sub;
+  g('bot-st').textContent=c.online;
+  g('inp').placeholder=c.ph;
+  g('c-title').textContent=c.ctitle;
+  resetChat();
+}
+
+function setSector(s){
+  sector=s;
+  document.querySelectorAll('.stab').forEach(t=>t.classList.toggle('on',t.dataset.s===s));
+  resetChat();
+}
+
+function resetChat(){
+  const s=D[lang].s[sector];
+  g('bot-nm').textContent=s.nm;
+  g('msgs').innerHTML='';
+  addMsg('b',s.w);
+  g('qr').innerHTML=s.q.map(q=>`<button class="qb" onclick="sendQ('${q.replace(/'/g,"&#39;")}')">${q}</button>`).join('');
+}
+
+function addMsg(role,text){
+  const msgs=g('msgs');
+  const d=document.createElement('div');
+  d.className=`msg ${role}`;
+  const fmt=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  d.innerHTML=role==='b'?`<div class="mi">🤖</div><div class="mb">${fmt}</div>`:`<div class="mb">${fmt}</div>`;
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+
+function showTyping(){
+  const msgs=g('msgs');
+  const d=document.createElement('div');
+  d.className='msg b';d.id='typ';
+  d.innerHTML='<div class="mi">🤖</div><div class="td"><span></span><span></span><span></span></div>';
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+
+function getReply(txt){
+  const t=txt.toLowerCase();
+  const r=D[lang].s[sector].r;
+  for(const k in r){
+    if(k!=='def'&&t.includes(k)){const a=r[k];return a[Math.floor(Math.random()*a.length)];}
+  }
+  const def=r['def'];return def[Math.floor(Math.random()*def.length)];
+}
+
+function sendQ(text){g('inp').value=text;send();}
+
+function send(){
+  if(busy)return;
+  const input=g('inp');const text=input.value.trim();
+  if(!text)return;
+  input.value='';g('qr').innerHTML='';
+  addMsg('u',text);busy=true;g('snd').disabled=true;
+  showTyping();
+  setTimeout(()=>{
+    const el=document.getElementById('typ');if(el)el.remove();
+    addMsg('b',getReply(text));
+    busy=false;g('snd').disabled=false;input.focus();
+  },800+Math.random()*700);
+}
+
+setLang('fr');
+</script>
+</body>
+</html>
