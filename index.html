@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatBot AI Montréal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07070f;--s:#0f0f1f;--s2:#161628;--gold:#C8A020;--gold2:#e6c040;--txt:#f0eff8;--mut:#8888aa;--bor:#1e1e3a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--txt);overflow-x:hidden}
+nav{position:sticky;top:0;z-index:100;background:rgba(7,7,15,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--bor);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem}.logo span{color:var(--gold)}
+.ltog{display:flex;gap:4px;background:var(--s2);border-radius:30px;padding:4px;border:1px solid var(--bor)}
+.lbtn{padding:5px 14px;border-radius:30px;font-size:.8rem;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--mut);transition:all .2s}
+.lbtn.on{background:var(--gold);color:#000}
+.hero{text-align:center;padding:80px 24px 60px;position:relative}
+.hero::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(200,160,32,.12) 0%,transparent 70%);pointer-events:none}
+.badge{display:inline-block;padding:6px 16px;border-radius:30px;border:1px solid rgba(200,160,32,.4);background:rgba(200,160,32,.08);font-size:.75rem;font-weight:600;color:var(--gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:24px}
+h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;line-height:1.1;margin-bottom:16px;letter-spacing:-1px}
+h1 em{color:var(--gold);font-style:normal}
+.hp{font-size:1.05rem;color:var(--mut);max-width:520px;margin:0 auto 40px;line-height:1.6}
+.ctag{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btnp{background:var(--gold);color:#000;font-weight:700;font-size:.9rem;padding:12px 28px;border-radius:30px;border:none;cursor:pointer;transition:all .2s;font-family:'Syne',sans-serif}
+.btnp:hover{background:var(--gold2);transform:translateY(-1px)}
+.btno{background:transparent;color:var(--txt);font-weight:600;font-size:.9rem;padding:12px 28px;border-radius:30px;border:1px solid var(--bor);cursor:pointer;transition:all .2s}
+.btno:hover{border-color:var(--gold);color:var(--gold)}
+.ds{max-width:980px;margin:0 auto;padding:0 24px 80px}
+.sl{text-align:center;font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.st{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:700;text-align:center;margin-bottom:32px}
+.stabs{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}
+.stab{padding:10px 20px;border-radius:30px;border:1px solid var(--bor);background:var(--s2);color:var(--mut);font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s}
+.stab:hover{border-color:var(--gold);color:var(--txt)}
+.stab.on{background:var(--gold);color:#000;border-color:var(--gold)}
+.cc{background:var(--s);border-radius:20px;border:1px solid var(--bor);overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.6)}
+.ch{padding:16px 20px;background:var(--s2);border-bottom:1px solid var(--bor);display:flex;align-items:center;gap:12px}
+.av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8a5a00);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.bn{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem}
+.bs{font-size:.72rem;color:#2ecc71;display:flex;align-items:center;gap:4px}
+.bs::before{content:'';width:6px;height:6px;border-radius:50%;background:#2ecc71;display:inline-block}
+.msgs{height:360px;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
+.msgs::-webkit-scrollbar{width:4px}
+.msgs::-webkit-scrollbar-thumb{background:var(--bor);border-radius:4px}
+.msg{display:flex;gap:8px;align-items:flex-end;animation:mi .25s ease}
+@keyframes mi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.u{justify-content:flex-end}
+.mb{max-width:78%;padding:10px 14px;border-radius:16px;font-size:.88rem;line-height:1.55}
+.msg.b .mb{background:var(--s2);border:1px solid var(--bor);border-bottom-left-radius:4px}
+.msg.u .mb{background:var(--gold);color:#000;font-weight:500;border-bottom-right-radius:4px}
+.mi{width:28px;height:28px;border-radius:50%;flex-shrink:0;background:var(--s2);border:1px solid var(--bor);display:flex;align-items:center;justify-content:center;font-size:.75rem}
+.td{display:flex;gap:4px;padding:12px 14px;background:var(--s2);border:1px solid var(--bor);border-radius:16px;border-bottom-left-radius:4px;align-items:center}
+.td span{width:6px;height:6px;background:var(--mut);border-radius:50%;animation:bo 1.2s infinite}
+.td span:nth-child(2){animation-delay:.2s}.td span:nth-child(3){animation-delay:.4s}
+@keyframes bo{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.cia{padding:16px;border-top:1px solid var(--bor);display:flex;gap:10px;align-items:center}
+.ci{flex:1;background:var(--s2);border:1px solid var(--bor);border-radius:30px;padding:10px 18px;color:var(--txt);font-size:.88rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+.ci::placeholder{color:var(--mut)}.ci:focus{border-color:var(--gold)}
+.sb{width:42px;height:42px;border-radius:50%;background:var(--gold);color:#000;border:none;cursor:pointer;font-size:1rem;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb:hover{background:var(--gold2);transform:scale(1.05)}.sb:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.qr{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 14px}
+.qb{padding:6px 12px;border-radius:20px;border:1px solid var(--bor);background:var(--s2);color:var(--mut);font-size:.78rem;font-weight:500;cursor:pointer;transition:all .18s}
+.qb:hover{border-color:var(--gold);color:var(--gold)}
+.ps{max-width:900px;margin:0 auto;padding:20px 24px 100px}
+.pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:32px}
+.pc{background:var(--s);border:1px solid var(--bor);border-radius:20px;padding:28px 24px;transition:all .25s;position:relative;overflow:hidden}
+.pc:hover{border-color:var(--gold);transform:translateY(-3px)}
+.pc.ft{border-color:var(--gold);background:linear-gradient(135deg,#0f0f1f 0%,#1a1400 100%)}
+.fb{position:absolute;top:16px;right:16px;background:var(--gold);color:#000;font-size:.65rem;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase}
+.pi{font-size:1.8rem;margin-bottom:12px}
+.pn{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:8px}
+.pa{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--gold);margin-bottom:4px}
+.pp{font-size:.78rem;color:var(--mut);margin-bottom:16px}
+.pf{list-style:none}
+.pf li{font-size:.84rem;color:var(--mut);padding:5px 0;border-bottom:1px solid var(--bor);display:flex;gap:8px;align-items:center}
+.pf li:last-child{border-bottom:none}.pf li::before{content:'✓';color:var(--gold);font-weight:700}
+.fc{text-align:center;background:var(--s);border-top:1px solid var(--bor);padding:50px 24px}
+.fc h2{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;margin-bottom:12px}
+.fc p{color:var(--mut);font-size:.95rem;margin-bottom:24px}
+.ci2{margin-top:24px;font-size:.82rem;color:var(--mut)}.ci2 a{color:var(--gold);text-decoration:none}
+.div{width:60px;height:3px;background:var(--gold);margin:0 auto 32px;border-radius:2px}
+@media(max-width:600px){nav{padding:0 16px}.hero{padding:50px 16px 40px}.ds,.ps{padding-left:16px;padding-right:16px}}
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">Chat<span>Bot</span> AI</div>
+  <div class="ltog">
+    <button class="lbtn on" onclick="setLang('fr')">FR</button>
+    <button class="lbtn" onclick="setLang('en')">EN</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="badge" id="hb"></div>
+  <h1 id="ht"></h1>
+  <p class="hp" id="hs"></p>
+  <div class="ctag">
+    <button class="btnp" id="cd" onclick="scrollToDemo()"></button>
+    <button class="btno" id="cp" onclick="scrollToPricing()"></button>
+  </div>
+</section>
+
+<section class="ds" id="demo">
+  <div class="sl" id="dl"></div>
+  <h2 class="st" id="dt"></h2>
+  <div class="stabs">
+    <button class="stab on" data-s="restaurant" onclick="setSector('restaurant')">🍽️ Restaurant</button>
+    <button class="stab" data-s="salon" onclick="setSector('salon')">💇 Salon</button>
+    <button class="stab" data-s="clinique" onclick="setSector('clinique')">🏥 Clinique</button>
+    <button class="stab" data-s="immobilier" onclick="setSector('immobilier')">🏠 Immobilier</button>
+  </div>
+  <div class="cc">
+    <div class="ch">
+      <div class="av" id="av">🍽️</div>
+      <div><div class="bn" id="bname">Chef Bot</div><div class="bs" id="bstat">En ligne</div></div>
+    </div>
+    <div class="msgs" id="msgs"></div>
+    <div class="qr" id="qr"></div>
+    <div class="cia">
+      <input class="ci" id="ci" type="text" onkeydown="if(event.key==='Enter')send()">
+      <button class="sb" id="sbtn" onclick="send()">➤</button>
+    </div>
+  </div>
+</section>
+
+<section class="ps" id="pricing">
+  <div class="sl" id="prl"></div>
+  <h2 class="st" id="prt"></h2>
+  <div class="div"></div>
+  <div class="pg">
+    <div class="pc">
+      <div class="pi">⚡</div><div class="pn" id="p1n"></div>
+      <div class="pa">$500</div><div class="pp" id="p1p"></div>
+      <ul class="pf"><li id="f11"></li><li id="f12"></li><li id="f13"></li><li id="f14"></li></ul>
+    </div>
+    <div class="pc ft">
+      <div class="fb" id="ftl"></div>
+      <div class="pi">🚀</div><div class="pn" id="p2n"></div>
+      <div class="pa">$100<span style="font-size:1rem;font-weight:400">/mois</span></div><div class="pp" id="p2p"></div>
+      <ul class="pf"><li id="f21"></li><li id="f22"></li><li id="f23"></li><li id="f24"></li></ul>
+    </div>
+    <div class="pc">
+      <div class="pi">💡</div><div class="pn" id="p3n"></div>
+      <div class="pa">$300</div><div class="pp" id="p3p"></div>
+      <ul class="pf"><li id="f31"></li><li id="f32"></li><li id="f33"></li><li id="f34"></li></ul>
+    </div>
+  </div>
+</section>
+
+<div class="fc">
+  <h2 id="ftt"></h2><p id="fts"></p>
+  <button class="btnp" id="ftb" onclick="window.location.href='mailto:info@chatbotai-montreal.com'"></button>
+  <div class="ci2">Montréal, QC &nbsp;·&nbsp; <a href="mailto:info@chatbotai-montreal.com">info@chatbotai-montreal.com</a></div>
+</div>
+
+<script>
+const D={
+fr:{
+  hb:'Intelligence Artificielle · Montréal',ht:'Un assistant <em>intelligent</em><br>pour votre entreprise',
+  hs:'Répondez à vos clients 24h/24, 7j/7 — sans effort. Chatbot IA personnalisé pour restaurants, salons, cliniques et agences immobilières.',
+  cd:'Voir la démo →',cp:'Voir les prix',dl:'Démonstration Live',dt:'Testez votre chatbot maintenant',
+  prl:'Tarification',prt:'Simple et transparent',ftl:'Populaire',bstat:'En ligne',ciph:'Écrivez votre message...',
+  p1n:'Démarrage',p1p:'Installation unique',p2n:'Mensuel',p2p:'Après installation',p3n:'Essai',p3p:"1 mois d'essai",
+  f11:'Chatbot personnalisé',f12:'Installation complète',f13:'Formation incluse',f14:'Support 30 jours',
+  f21:'Mises à jour illimitées',f22:'Support prioritaire',f23:'Rapports mensuels',f24:'Améliorations continues',
+  f31:'Chatbot de base',f32:'Parfait pour tester',f33:'Migration facile',f34:'Aucun engagement',
+  ftt:'Prêt à automatiser votre service client ?',fts:'Obtenez votre chatbot en moins de 48 heures.',ftb:'Contactez-nous maintenant →',
+  s:{
+    restaurant:{n:'Chef Bot',i:'🍽️',w:"Bonjour ! Je suis **Chef Bot**, l'assistant virtuel de ce restaurant. Comment puis-je vous aider ? 😊",
+      q:["📅 Réserver une table","🍕 Voir le menu","⏰ Heures d'ouverture","🚗 Livraison disponible ?"],
+      r:{réserv:["Parfait ! Pour quelle date et heure ? Et pour combien de personnes ? 😊","Nous avons des disponibilités ce soir dès 18h. Quel nom pour la réservation ?"],
+         menu:["Notre menu du jour : 🥗 Salade César, 🍝 Pâtes au saumon, 🥩 Filet de bœuf grillé. Voulez-vous la carte complète ?","Options végétariennes et sans gluten disponibles. Avez-vous des allergies ?"],
+         heure:["Ouvert mardi–dimanche :\n🕐 Dîner : 11h30–14h30\n🕕 Souper : 17h30–22h00\nFermé le lundi."],
+         livrai:["Oui ! Via UberEats et DoorDash dans un rayon de 5 km. 🚗 Commandez sur l'app ou appelez-nous !"],
+         allergi:["Nous prenons les allergies très au sérieux. 🌿 Dites-nous vos restrictions et notre chef adaptera votre repas."],
+         def:["Bien sûr, je peux vous aider ! 😊 Voulez-vous faire une réservation ou voir notre menu ?","Bonne question ! Je transmets à notre équipe. En attendant, puis-je vous aider avec autre chose ? 🍽️"]}},
+    salon:{n:'Style Bot',i:'💇',w:"Bonjour ! Je suis **Style Bot**, votre assistant beauté. Comment puis-je vous aider ? 💅",
+      q:["📅 Prendre rendez-vous","💅 Services disponibles","💰 Prix et tarifs","📍 Adresse et stationnement"],
+      r:{rendez:["Super ! Quel service vous intéresse ? Coupe, coloration, manucure ? 💇","Disponibilités demain : 10h, 14h et 16h30. Lequel vous convient ?"],
+         service:["Nous offrons : ✂️ Coupe homme/femme, 🎨 Coloration & mèches, 💆 Soins capillaires, 💅 Manucure & pédicure, 👰 Coiffure mariage."],
+         prix:["Nos tarifs :\n✂️ Coupe femme : dès 45$\n✂️ Coupe homme : dès 25$\n🎨 Coloration : dès 75$\n💅 Manucure : dès 35$"],
+         adresse:["📍 1234 rue Sainte-Catherine, Montréal.\nStationnement gratuit à l'arrière ! 🚗"],
+         def:["Je serais ravie de vous aider ! 💇 Souhaitez-vous prendre rendez-vous ?","Notre équipe de stylistes est là pour vous. Voulez-vous être rappelé ? 📞"]}},
+    clinique:{n:'Santé Bot',i:'🏥',w:"Bonjour ! Je suis **Santé Bot**, l'assistant de votre clinique. Comment puis-je vous aider ? 🏥",
+      q:["📅 Prendre rendez-vous","⏰ Heures d'ouverture","🆘 Urgences mineures","👨‍⚕️ Nos médecins"],
+      r:{rendez:["Quel type de consultation ? Médecine générale, suivi, autre ? 📋","Avez-vous déjà un médecin de famille chez nous, ou est-ce votre première visite ?"],
+         heure:["Ouvert :\n🗓️ Lundi–Vendredi : 8h00–18h00\n🗓️ Samedi : 9h00–14h00\n🗓️ Dimanche : Fermé\n🚨 Urgences mineures acceptées sans rendez-vous."],
+         urgence:["Urgences mineures (fièvre, coupures, infections) : sans rendez-vous. ⚠️ Urgences graves : composez le 911."],
+         médecin:["Notre équipe : 5 médecins généralistes et 2 infirmières praticiennes. 👨‍⚕️ Je peux vérifier les disponibilités pour un médecin de famille."],
+         def:["Pour des questions médicales précises, notre équipe est disponible sur rendez-vous. 🏥 Puis-je vous aider à en planifier un ?","Je suis là pour vous aider ! 😊 Voulez-vous prendre rendez-vous ?"]}},
+    immobilier:{n:'Immo Bot',i:'🏠',w:"Bonjour ! Je suis **Immo Bot**, votre assistant immobilier à Montréal. Comment puis-je vous aider ? 🏠",
+      q:["🔍 Chercher une propriété","💰 Évaluer mon bien","📅 Visite virtuelle","📊 Prix du marché"],
+      r:{cherch:["Quel type de propriété ? 🏠 Condo, maison, duplex ? Et dans quel secteur de Montréal ?","Quel est votre budget approximatif ? 💰"],
+         évalue:["Pour une évaluation gratuite, notre équipe peut se déplacer chez vous ! 📊 Adresse et type de propriété ?","Les prix ont augmenté de 8% dans votre secteur cette année. Voulez-vous un rapport détaillé ?"],
+         visite:["Visites virtuelles 3D disponibles pour toutes nos propriétés ! 🎥 Voulez-vous voir notre catalogue ?"],
+         prix:["📊 Marché montréalais 2024 :\n🏠 Maison : moy. 650 000$\n🏢 Condo : moy. 425 000$\n📈 +6-8% vs l'an dernier."],
+         def:["Notre équipe de courtiers experts est là pour vous ! 🏠 Voulez-vous une consultation gratuite ?","Le marché immobilier montréalais offre de belles opportunités ! Que recherchez-vous ? 😊"]}}
+  }
+},
+en:{
+  hb:'Artificial Intelligence · Montreal',ht:'An <em>intelligent</em> assistant<br>for your business',
+  hs:'Answer your customers 24/7 — effortlessly. Custom AI chatbot for restaurants, salons, clinics and real estate agencies.',
+  cd:'See the demo →',cp:'View pricing',dl:'Live Demo',dt:'Test your chatbot right now',
+  prl:'Pricing',prt:'Simple and transparent',ftl:'Popular',bstat:'Online',ciph:'Type your message...',
+  p1n:'Starter',p1p:'One-time setup',p2n:'Monthly',p2p:'After setup',p3n:'Trial',p3p:'1 month trial',
+  f11:'Custom chatbot',f12:'Full setup',f13:'Training included',f14:'30-day support',
+  f21:'Unlimited updates',f22:'Priority support',f23:'Monthly reports',f24:'Continuous improvements',
+  f31:'Basic chatbot',f32:'Perfect to test',f33:'Easy migration',f34:'No commitment',
+  ftt:'Ready to automate your customer service?',fts:'Get your chatbot in less than 48 hours.',ftb:'Contact us now →',
+  s:{
+    restaurant:{n:'Chef Bot',i:'🍽️',w:"Hello! I'm **Chef Bot**, your restaurant's virtual assistant. How can I help? 😊",
+      q:["📅 Book a table","🍕 View the menu","⏰ Opening hours","🚗 Delivery available?"],
+      r:{book:["For what date and time? And how many people? 😊","We have availability tonight from 6pm. What name for the reservation?"],
+         menu:["Today's menu: 🥗 Caesar Salad, 🍝 Salmon Pasta, 🥩 Grilled Tenderloin. Want the full menu?","Vegetarian and gluten-free options available. Any allergies?"],
+         hour:["Open Tuesday–Sunday:\n🕐 Lunch: 11:30am–2:30pm\n🕕 Dinner: 5:30pm–10pm\nClosed Mondays."],
+         deliver:["Yes! Via UberEats & DoorDash within 5km. 🚗 Order on the app or call us!"],
+         allerg:["We take allergies seriously! 🌿 Tell us your restrictions and our chef will adapt your meal."],
+         def:["Of course, I can help! 😊 Would you like to make a reservation or see our menu?","Great question! Can I help with a reservation or menu info in the meantime? 🍽️"]}},
+    salon:{n:'Style Bot',i:'💇',w:"Hello! I'm **Style Bot**, your beauty assistant. How can I help today? 💅",
+      q:["📅 Book appointment","💅 Services offered","💰 Prices & rates","📍 Location & parking"],
+      r:{book:["Which service? Haircut, coloring, manicure? 💇","Openings tomorrow: 10am, 2pm and 4:30pm. Which works best?"],
+         service:["We offer: ✂️ Men's/Women's cuts, 🎨 Color & highlights, 💆 Hair treatments, 💅 Manicure & pedicure, 👰 Wedding hair."],
+         price:["Our rates:\n✂️ Women's cut: from $45\n✂️ Men's cut: from $25\n🎨 Color: from $75\n💅 Manicure: from $35"],
+         address:["📍 1234 Sainte-Catherine St, Montreal.\nFree parking at the back! 🚗"],
+         def:["I'd love to help! 💇 Would you like to book an appointment?","Our stylists are here for you. Would you like a callback? 📞"]}},
+    clinique:{n:'Health Bot',i:'🏥',w:"Hello! I'm **Health Bot**, your clinic assistant. How can I help? 🏥",
+      q:["📅 Book appointment","⏰ Opening hours","🆘 Minor emergencies","👨‍⚕️ Our doctors"],
+      r:{book:["What type of consultation? General medicine, follow-up, other? 📋","Is this your first visit, or do you have a family doctor with us?"],
+         hour:["Open:\n🗓️ Mon–Fri: 8am–6pm\n🗓️ Saturday: 9am–2pm\n🗓️ Sunday: Closed\n🚨 Walk-in minor emergencies accepted."],
+         emerg:["Minor emergencies (fever, cuts, mild infections): walk-in welcome. ⚠️ Serious emergencies: call 911."],
+         doctor:["Our team: 5 GPs and 2 nurse practitioners. 👨‍⚕️ Would you like to be assigned a family doctor?"],
+         def:["Our team is available for appointments. 🏥 Can I help you book one?","I'm here to help! 😊 Would you like to schedule an appointment?"]}},
+    immobilier:{n:'Immo Bot',i:'🏠',w:"Hello! I'm **Immo Bot**, your Montreal real estate assistant. How can I help? 🏠",
+      q:["🔍 Search property","💰 Evaluate my home","📅 Virtual tour","📊 Market prices"],
+      r:{search:["What type of property? 🏠 Condo, house, duplex? Which area of Montreal?","What's your approximate budget? 💰"],
+         evaluat:["Free evaluation available — our team comes to you! 📊 Address and property type?","Prices are up 8% in your area this year. Want a detailed report?"],
+         tour:["3D virtual tours for all our listings! 🎥 Want to see a specific property or our catalog?"],
+         price:["📊 Montreal market 2024:\n🏠 House: avg $650,000\n🏢 Condo: avg $425,000\n📈 +6-8% year over year."],
+         def:["Our expert brokers are here for you! 🏠 Want a free consultation?","Great opportunities in Montreal right now! What are you looking for? 😊"]}}
+  }
+}
+};
+
+let lg='fr',sc='restaurant',busy=false;
+const g=id=>document.getElementById(id);
+
+function applyLang(){
+  const c=D[lg];
+  const ids=['hb','dl','dt','prl','prt','ftl','bstat','p1n','p1p','p2n','p2p','p3n','p3p',
+    'f11','f12','f13','f14','f21','f22','f23','f24','f31','f32','f33','f34','ftt','fts','ftb','cd','cp'];
+  ids.forEach(id=>{ if(g(id)) g(id).textContent=c[id]; });
+  g('ht').innerHTML=c.ht;
+  g('hs').textContent=c.hs;
+  g('ci').placeholder=c.ciph;
+}
+
+function setLang(l){
+  lg=l;
+  document.querySelectorAll('.lbtn').forEach(b=>b.classList.remove('on'));
+  document.querySelector(`.lbtn[onclick="setLang('${l}')"]`).classList.add('on');
+  applyLang(); resetChat();
+}
+
+function setSector(s){
+  sc=s;
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('on'));
+  document.querySelector(`[data-s="${s}"]`).classList.add('on');
+  resetChat();
+}
+
+function resetChat(){
+  const s=D[lg].s[sc];
+  g('av').textContent=s.i; g('bname').textContent=s.n;
+  g('msgs').innerHTML='';
+  addMsg('b',s.w);
+  g('qr').innerHTML=s.q.map(q=>`<button class="qb" onclick="sendQ('${q.replace(/'/g,"&#39;")}')">${q}</button>`).join('');
+}
+
+function addMsg(role,text){
+  const msgs=g('msgs');
+  const d=document.createElement('div');
+  d.className=`msg ${role}`;
+  const fmt=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+  d.innerHTML=role==='b'?`<div class="mi">🤖</div><div class="mb">${fmt}</div>`:`<div class="mb">${fmt}</div>`;
+  msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
+}
+
+function showTyping(){
+  const msgs=g('msgs');
+  const d=document.createElement('div');
+  d.className='msg b'; d.id='typ';
+  d.innerHTML='<div class="mi">🤖</div><div class="td"><span></span><span></span><span></span></div>';
+  msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight;
+}
+
+function getReply(txt){
+  const t=txt.toLowerCase();
+  const r=D[lg].s[sc].r;
+  for(const k in r){ if(k!=='def'&&t.includes(k)){ const a=r[k]; return a[Math.floor(Math.random()*a.length)]; } }
+  const def=r['def']; return def[Math.floor(Math.random()*def.length)];
+}
+
+function sendQ(text){ g('ci').value=text; send(); }
+
+function send(){
+  if(busy) return;
+  const input=g('ci'); const text=input.value.trim();
+  if(!text) return;
+  input.value=''; g('qr').innerHTML='';
+  addMsg('u',text); busy=true; g('sbtn').disabled=true;
+  showTyping();
+  setTimeout(()=>{
+    const el=document.getElementById('typ'); if(el) el.remove();
+    addMsg('b',getReply(text));
+    busy=false; g('sbtn').disabled=false; input.focus();
+  },800+Math.random()*800);
+}
+
+function scrollToDemo(){g('demo').scrollIntoView({behavior:'smooth'})}
+function scrollToPricing(){g('pricing').scrollIntoView({behavior:'smooth'})}
+
+applyLang(); resetChat();
+</script>
+</body>
+</html>
